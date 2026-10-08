@@ -6,12 +6,15 @@ import InputBar from '../components/InputBar'
 import type { TaskRecord } from '../types'
 import { getActiveApiProfile } from '../lib/apiProfiles'
 
-const CREATE_MODEL_OPTIONS = ['image-1', 'image-1.5', 'image-2'] as const
+const CREATE_MODEL_OPTIONS = ['image-2.5-flare', 'image-2.5-sunburst', 'image-2.5', 'image-2', 'image-1.5', 'image-1'] as const
 type CreateModelOption = typeof CREATE_MODEL_OPTIONS[number]
 const CREATE_MODEL_ALIASES: Record<CreateModelOption, string[]> = {
-  'image-1': ['image-1', 'gpt-image-1'],
-  'image-1.5': ['image-1.5', 'gpt-image-1.5'],
+  'image-2.5-flare': ['image-2.5-flare', 'gpt-image-2.5-flare'],
+  'image-2.5-sunburst': ['image-2.5-sunburst', 'gpt-image-2.5-sunburst'],
+  'image-2.5': ['image-2.5', 'gpt-image-2.5'],
   'image-2': ['image-2', 'gpt-image-2'],
+  'image-1.5': ['image-1.5', 'gpt-image-1.5'],
+  'image-1': ['image-1', 'gpt-image-1'],
 }
 
 const CREATE_MODEL_META: Record<CreateModelOption, {
@@ -21,6 +24,27 @@ const CREATE_MODEL_META: Record<CreateModelOption, {
   theme: 'classic' | 'balanced' | 'pro'
   preview: string
 }> = {
+  'image-2.5-flare': {
+    badges: ['默认', '快速'],
+    summary: '日常出图首选 · 速度快、质量高',
+    menuLabel: '日常首选',
+    theme: 'pro',
+    preview: '/model-preview-image-2.png',
+  },
+  'image-2.5-sunburst': {
+    badges: ['编辑强化'],
+    summary: '精细编辑 · 编辑精度与一致性更强',
+    menuLabel: '精细编辑',
+    theme: 'balanced',
+    preview: '/model-preview-image-1-5.png',
+  },
+  'image-2.5': {
+    badges: ['2.5 标准'],
+    summary: '2.5 标准版 · 均衡通用',
+    menuLabel: '2.5 标准',
+    theme: 'balanced',
+    preview: '/model-preview-image-1-5.png',
+  },
   'image-1': {
     badges: ['兼容', '稳定'],
     summary: '基础生成 · 适合旧版接口与稳定配置',
@@ -36,9 +60,9 @@ const CREATE_MODEL_META: Record<CreateModelOption, {
     preview: '/model-preview-image-1-5.png',
   },
   'image-2': {
-    badges: ['默认', '高质量'],
-    summary: '默认推荐 · 更强细节与复杂提示词理解',
-    menuLabel: '默认推荐',
+    badges: ['高质量'],
+    summary: '上一代旗舰 · 更强细节与复杂提示词理解',
+    menuLabel: '上一代旗舰',
     theme: 'pro',
     preview: '/model-preview-image-2.png',
   },
@@ -48,8 +72,17 @@ function getCreateModelOption(model: string): CreateModelOption {
   return CREATE_MODEL_OPTIONS.find((option) => CREATE_MODEL_ALIASES[option].includes(model)) ?? 'image-2'
 }
 
+const CREATE_MODEL_REQUEST_ID: Record<CreateModelOption, string> = {
+  'image-2.5-flare': 'gpt-image-2.5-flare',
+  'image-2.5-sunburst': 'gpt-image-2.5-sunburst',
+  'image-2.5': 'gpt-image-2.5',
+  'image-2': 'gpt-image-2',
+  'image-1.5': 'gpt-image-1.5',
+  'image-1': 'gpt-image-1',
+}
+
 function getCreateModelRequestId(model: CreateModelOption) {
-  return model === 'image-2' ? 'gpt-image-2' : model
+  return CREATE_MODEL_REQUEST_ID[model]
 }
 
 function CreateModelIcon({ model }: { model: CreateModelOption }) {

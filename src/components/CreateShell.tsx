@@ -174,7 +174,8 @@ function CreateSettingsPanel() {
   )
   const [nInput, setNInput] = useState(String(params.n))
   const activeProfile = getActiveApiProfile(settings)
-  const activeModel = ['image-1', 'image-1.5', 'image-2'].includes(activeProfile.model) ? activeProfile.model : 'image-2'
+  const CREATE_MODEL_LABELS = ['image-2.5-flare', 'image-2.5-sunburst', 'image-2.5', 'image-2', 'image-1.5', 'image-1']
+  const activeModel = CREATE_MODEL_LABELS.includes(activeProfile.model) ? activeProfile.model : 'image-2'
   const outputImageLimit = getOutputImageLimitForSettings(settings)
   const displaySize = normalizeImageSize(params.size) || DEFAULT_PARAMS.size
   const compressionDisabled = params.output_format === 'png'
